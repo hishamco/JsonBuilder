@@ -5,14 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace SettingSaver
+namespace JsonBuilder
 {
-    public enum Formatting
-    {
-        Indented,
-        Minify
-    }
-
     public sealed class JsonBuilder
     {
         private readonly ExpandoObject _currentObject;
@@ -36,10 +30,10 @@ namespace SettingSaver
         public JsonBuilder AppendProperty(string property, dynamic value)
         {
             if (property == null)
-                throw new NullReferenceException("The JSON properties can't be null!");
+                throw new ArgumentNullException("The JSON properties can't be null!");
             property = property.Replace(" ", "_");
 
-            var expandoDict = this._currentObject as IDictionary<string, dynamic>;
+            var expandoDict = _currentObject as IDictionary<string, dynamic>;
             if (expandoDict.ContainsKey(property))
                 expandoDict[property] = value;
             else
@@ -128,14 +122,6 @@ namespace SettingSaver
 
             var jsDes = JavaScriptSerializer.Deserialize<dynamic>(jsonString);
             return jsDes;
-            #region MyRegion
-
-            //var jsDes = JavaScriptSerializer.DeserializeObject(jsonString) as IDictionary<string, dynamic> ?? throw new Exception("");
-            //var objToReturn = new ExpandoObject() as IDictionary<string, dynamic>;
-            //foreach (var jsDe in jsDes)
-            //    objToReturn[jsDe.Key] = jsDe.Value;
-
-            #endregion
         }
 
         /// <summary>
