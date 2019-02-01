@@ -72,10 +72,10 @@ namespace JsonBuilder
         }
 
         /// <summary>
-        /// 
+        /// Check if the json string is a valid json or not.
         /// </summary>
         /// <param name="jsonString">JSON</param>
-        /// <returns>Ture if is valid, otherwise fase.</returns>
+        /// <returns>True if is valid, otherwise False.</returns>
         public static bool IsValidJson(string jsonString)
         {
             jsonString = jsonString.Trim();
@@ -95,11 +95,6 @@ namespace JsonBuilder
             return false;
         }
 
-        /// <summary>
-        /// Convert JSON string to .NET object
-        /// </summary>
-        /// <param name="jsonString">JSON string</param>
-        /// <returns>Dictionary Representing JSON Properties</returns>
         private static dynamic ConvertToObject(string jsonString)
         {
             if (!IsValidJson(jsonString))
@@ -136,11 +131,6 @@ namespace JsonBuilder
             return expandoDict.Keys.Count == properties.Length && properties.All(propertyInfo => expandoDict.Keys.Contains(propertyInfo.Name));
         }
 
-        /// <summary>
-        /// Formatting the output.
-        /// </summary>
-        /// <param name="jsonString"></param>
-        /// <returns></returns>
         private static string FormatOutput(string jsonString)
         {
             var stringBuilder = new StringBuilder();
