@@ -3,6 +3,8 @@ init:
 branches:
   only:
     - master
+before_build: 
+  - nuget restore
 build_script:
   - ps: .\build.ps1
 clone_depth: 1
