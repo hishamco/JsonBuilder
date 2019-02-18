@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Formatting.cs" />
     <Compile Include="JsonBuilder.cs" />
+    <Compile Include="JsonExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

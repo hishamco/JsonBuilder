@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Web.Script.Serialization;
 
 namespace JsonBuilder
@@ -41,27 +40,6 @@ namespace JsonBuilder
             return this;
         }
 
-        /// <inheritdoc />
-        public sealed override string ToString() => ToString(Formatting.Indented);
-
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <param name="formatting">The JSON format.</param>
-        /// <returns>A string that represents the current object.</returns>
-        public string ToString(Formatting formatting)
-        {
-            var jsonString = JavaScriptSerializer.Serialize(_currentObject)
-                .Replace("\"Key\":", "")
-                .Replace(",\"Value\":", ":")
-                .Replace("},{", ",")
-                .TrimStart('[')
-                .TrimEnd(']');
-
-            return formatting == Formatting.Indented
-                ? FormatOutput(JavaScriptSerializer.Serialize(ConvertToObject(jsonString)))
-                : JavaScriptSerializer.Serialize(ConvertToObject(jsonString));
-        }
 
         /// <summary>
         /// Bind Json Objects To Array Of Json Objects
@@ -72,7 +50,9 @@ namespace JsonBuilder
         public static string MargeJsonObjects(Formatting formatting = Formatting.Indented, params string[] jsonStrings)
         {
             var jsonObject = jsonStrings.Where(IsValidJson).Select(js => JavaScriptSerializer.DeserializeObject(js)).ToList();
-            return formatting == Formatting.Indented ? FormatOutput(JavaScriptSerializer.Serialize(jsonObject)) : JavaScriptSerializer.Serialize(jsonObject);
+            return formatting == Formatting.Indented
+                ? JavaScriptSerializer.Serialize(jsonObject).Indent()
+                : JavaScriptSerializer.Serialize(jsonObject);
         }
 
         /// <summary>
@@ -99,15 +79,27 @@ namespace JsonBuilder
             return false;
         }
 
-        private static dynamic ConvertToObject(string jsonString)
+        /// <inheritdoc />
+        public sealed override string ToString() => ToString(Formatting.Indented);
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <param name="formatting">The JSON format.</param>
+        /// <returns>A string that represents the current object.</returns>
+        public string ToString(Formatting formatting)
         {
-            if (!IsValidJson(jsonString))
-                throw new Exception("Not Valid Json Object!");
+            var jsonString = JavaScriptSerializer.Serialize(_currentObject)
+                .Replace("\"Key\":", "")
+                .Replace(",\"Value\":", ":")
+                .Replace("},{", ",")
+                .TrimStart('[')
+                .TrimEnd(']');
 
-            var jsDes = JavaScriptSerializer.DeserializeObject(jsonString);
-            return jsDes;
+            return formatting == Formatting.Indented
+                ? JavaScriptSerializer.Serialize(ConvertToObject(jsonString)).Indent()
+                : JavaScriptSerializer.Serialize(ConvertToObject(jsonString));
         }
-
 
         /// <summary>
         /// Convert JSON string to .NET object
@@ -135,71 +127,12 @@ namespace JsonBuilder
             return expandoDict.Keys.Count == properties.Length && properties.All(propertyInfo => expandoDict.Keys.Contains(propertyInfo.Name));
         }
 
-        private static string FormatOutput(string jsonString)
+        private static object ConvertToObject(string jsonString)
         {
-            var stringBuilder = new StringBuilder();
+            if (!IsValidJson(jsonString))
+                throw new Exception("Not Valid Json Object!");
 
-            var escaping = false;
-            var inQuotes = false;
-            var indentation = 0;
-
-            foreach (var character in jsonString)
-            {
-                if (escaping)
-                {
-                    escaping = false;
-                    stringBuilder.Append(character);
-                }
-                else
-                {
-                    if (character == '\\')
-                    {
-                        escaping = true;
-                        stringBuilder.Append(character);
-                    }
-                    else if (character == '\"')
-                    {
-                        inQuotes = !inQuotes;
-                        stringBuilder.Append(character);
-                    }
-                    else if (!inQuotes)
-                    {
-                        if (character == ',')
-                        {
-                            stringBuilder.Append(character);
-                            stringBuilder.Append("\r\n");
-                            stringBuilder.Append('\t', indentation);
-                        }
-                        else if (character == '[' || character == '{')
-                        {
-                            stringBuilder.Append(character);
-                            stringBuilder.Append("\r\n");
-                            stringBuilder.Append('\t', ++indentation);
-                        }
-                        else if (character == ']' || character == '}')
-                        {
-                            stringBuilder.Append("\r\n");
-                            stringBuilder.Append('\t', --indentation);
-                            stringBuilder.Append(character);
-                        }
-                        else if (character == ':')
-                        {
-                            stringBuilder.Append(character);
-                            stringBuilder.Append('\t');
-                        }
-                        else
-                        {
-                            stringBuilder.Append(character);
-                        }
-                    }
-                    else
-                    {
-                        stringBuilder.Append(character);
-                    }
-                }
-            }
-
-            return stringBuilder.ToString();
+            return JavaScriptSerializer.DeserializeObject(jsonString);
         }
     }
 }
