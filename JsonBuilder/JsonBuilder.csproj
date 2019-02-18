@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Formatting.cs" />
+    <Compile Include="JsonFormat.cs" />
     <Compile Include="JsonBuilder.cs" />
-    <Compile Include="JsonExtensionMethods.cs" />
+    <Compile Include="JsonExtensions.cs" />
     <Compile Include="JsonFormatException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

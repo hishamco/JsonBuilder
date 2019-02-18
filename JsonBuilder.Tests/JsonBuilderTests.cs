@@ -6,6 +6,19 @@ namespace JsonBuilder.Tests
     public class JsonBuilderTests
     {
         [TestMethod]
+        public void NewJsonBuilderObject_ShouldBeEmpty()
+        {
+            // Arrange
+            JsonBuilder obj;
+
+            // Act
+            obj = new JsonBuilder();
+
+            // Assert
+            Assert.AreEqual(obj.ToString(JsonFormat.Indent), JsonBuilder.EmptyJsonString);
+        }
+
+        [TestMethod]
         public void AddProperties()
         {
             // Arrange

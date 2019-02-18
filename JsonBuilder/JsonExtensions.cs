@@ -5,7 +5,7 @@ namespace JsonBuilder
     /// <summary>
     /// Provides an extension methods for JSON string.
     /// </summary>
-    public static class JsonExtensionMethods
+    public static class JsonExtensions
     {
         /// <summary>
         /// Formats a JSON string with indentation.

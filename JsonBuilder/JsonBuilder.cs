@@ -11,6 +11,8 @@ namespace JsonBuilder
         private readonly ExpandoObject _currentObject;
         private static readonly JavaScriptSerializer JavaScriptSerializer = new JavaScriptSerializer();
 
+        public const string EmptyJsonString = "{}";
+
         /// <summary>
         /// Create New Json Object
         /// </summary>
@@ -89,6 +91,9 @@ namespace JsonBuilder
         /// <returns>A string that represents the current object.</returns>
         public string ToString(JsonFormat formatting)
         {
+            if ((_currentObject as IDictionary<string, dynamic>).Keys.Count == 0)
+                return EmptyJsonString;
+
             var jsonString = JavaScriptSerializer.Serialize(_currentObject)
                 .Replace("\"Key\":", "")
                 .Replace(",\"Value\":", ":")
