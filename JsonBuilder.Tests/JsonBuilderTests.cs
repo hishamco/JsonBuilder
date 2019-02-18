@@ -15,7 +15,7 @@ namespace JsonBuilder.Tests
             // Act
             obj.AppendProperty("name", "Jon");
             obj.AppendProperty("age", 22);
-            jsonResult = obj.Stringify(Formatting.Minify);
+            jsonResult = obj.ToString(Formatting.Minify);
 
             // Assert
             Assert.AreEqual(jsonResult, "{\"name\":\"Jon\",\"age\":22}");
@@ -32,7 +32,7 @@ namespace JsonBuilder.Tests
 
             // Act
             obj.AppendProperty("name", "Jon");
-            jsonResult = obj.Stringify(format);
+            jsonResult = obj.ToString(format);
 
             // Assert
             Assert.AreEqual(jsonResult, expectedResult);

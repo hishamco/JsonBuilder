@@ -41,13 +41,17 @@ namespace JsonBuilder
             return this;
         }
 
-        /// <summary>   
-        /// Convert Json Object to string
+        /// <inheritdoc />
+        public sealed override string ToString() => ToString(Formatting.Indented);
+
+        /// <summary>
+        /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns>string contains JSON object</returns>
-        public string Stringify(Formatting formatting = Formatting.Indented)
+        /// <param name="formatting">The JSON format.</param>
+        /// <returns>A string that represents the current object.</returns>
+        public string ToString(Formatting formatting)
         {
-            var jsonObject = JavaScriptSerializer.Serialize(this._currentObject)
+            var jsonString = JavaScriptSerializer.Serialize(_currentObject)
                 .Replace("\"Key\":", "")
                 .Replace(",\"Value\":", ":")
                 .Replace("},{", ",")
@@ -55,8 +59,8 @@ namespace JsonBuilder
                 .TrimEnd(']');
 
             return formatting == Formatting.Indented
-                ? FormatOutput(JavaScriptSerializer.Serialize(ConvertToObject(jsonObject)))
-                : JavaScriptSerializer.Serialize(ConvertToObject(jsonObject));
+                ? FormatOutput(JavaScriptSerializer.Serialize(ConvertToObject(jsonString)))
+                : JavaScriptSerializer.Serialize(ConvertToObject(jsonString));
         }
 
         /// <summary>
