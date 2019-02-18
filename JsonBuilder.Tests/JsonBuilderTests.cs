@@ -15,16 +15,16 @@ namespace JsonBuilder.Tests
             // Act
             obj.AppendProperty("name", "Jon");
             obj.AppendProperty("age", 22);
-            jsonResult = obj.ToString(Formatting.Minify);
+            jsonResult = obj.ToString(JsonFormat.Minify);
 
             // Assert
             Assert.AreEqual(jsonResult, "{\"name\":\"Jon\",\"age\":22}");
         }
 
         [TestMethod]
-        [DataRow(Formatting.Indented, "{\r\n\t\"name\":\t\"Jon\"\r\n}")]
-        [DataRow(Formatting.Minify, "{\"name\":\"Jon\"}")]
-        public void FormatJson(Formatting format, string expectedResult)
+        [DataRow(JsonFormat.Indent, "{\r\n\t\"name\":\t\"Jon\"\r\n}")]
+        [DataRow(JsonFormat.Minify, "{\"name\":\"Jon\"}")]
+        public void FormatJson(JsonFormat format, string expectedResult)
         {
             // Arrange
             JsonBuilder obj = new JsonBuilder();
@@ -62,7 +62,7 @@ namespace JsonBuilder.Tests
             string jsonResult;
 
             // Act
-            jsonResult = JsonBuilder.MargeJsonObjects(Formatting.Minify, json1, json2);
+            jsonResult = JsonBuilder.MargeJsonObjects(JsonFormat.Minify, json1, json2);
 
             // Assert
             Assert.AreEqual(jsonResult, "[{\"name\":\"Jon\"},{\"name\":\"Doe\"}]");

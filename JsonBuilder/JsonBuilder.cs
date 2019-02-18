@@ -47,10 +47,10 @@ namespace JsonBuilder
         /// <param name="formatting"></param>
         /// <param name="jsonStrings"></param>
         /// <returns>string contains array of json objects</returns>
-        public static string MargeJsonObjects(Formatting formatting = Formatting.Indented, params string[] jsonStrings)
+        public static string MargeJsonObjects(JsonFormat formatting = JsonFormat.Indent, params string[] jsonStrings)
         {
             var jsonObject = jsonStrings.Where(IsValidJson).Select(js => JavaScriptSerializer.DeserializeObject(js)).ToList();
-            return formatting == Formatting.Indented
+            return formatting == JsonFormat.Indent
                 ? JavaScriptSerializer.Serialize(jsonObject).Indent()
                 : JavaScriptSerializer.Serialize(jsonObject);
         }
@@ -80,14 +80,14 @@ namespace JsonBuilder
         }
 
         /// <inheritdoc />
-        public sealed override string ToString() => ToString(Formatting.Indented);
+        public sealed override string ToString() => ToString(JsonFormat.Indent);
 
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <param name="formatting">The JSON format.</param>
         /// <returns>A string that represents the current object.</returns>
-        public string ToString(Formatting formatting)
+        public string ToString(JsonFormat formatting)
         {
             var jsonString = JavaScriptSerializer.Serialize(_currentObject)
                 .Replace("\"Key\":", "")
@@ -96,7 +96,7 @@ namespace JsonBuilder
                 .TrimStart('[')
                 .TrimEnd(']');
 
-            return formatting == Formatting.Indented
+            return formatting == JsonFormat.Indent
                 ? JavaScriptSerializer.Serialize(ConvertToObject(jsonString)).Indent()
                 : JavaScriptSerializer.Serialize(ConvertToObject(jsonString));
         }

@@ -1,8 +1,8 @@
 ﻿namespace JsonBuilder
 {
-    public enum Formatting
+    public enum JsonFormat
     {
-        Indented,
+        Indent,
         Minify
     }
 }
