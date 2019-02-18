@@ -109,10 +109,9 @@ namespace JsonBuilder
         public static Dictionary<string, dynamic> ToObject(string jsonString)
         {
             if (!IsValidJson(jsonString))
-                throw new Exception("Not Valid Json Object!");
+                throw new JsonFormatException();
 
-            var jsDes = JavaScriptSerializer.Deserialize<dynamic>(jsonString);
-            return jsDes;
+            return JavaScriptSerializer.Deserialize<dynamic>(jsonString);
         }
 
         /// <summary>
@@ -130,7 +129,7 @@ namespace JsonBuilder
         private static object ConvertToObject(string jsonString)
         {
             if (!IsValidJson(jsonString))
-                throw new Exception("Not Valid Json Object!");
+                throw new JsonFormatException();
 
             return JavaScriptSerializer.DeserializeObject(jsonString);
         }
