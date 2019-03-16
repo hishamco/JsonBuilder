@@ -15,7 +15,7 @@ namespace JsonBuilder.Tests
             obj = new JsonBuilder();
 
             // Assert
-            Assert.AreEqual(obj.ToString(JsonFormat.Indent), JsonBuilder.EmptyJsonString);
+            Assert.AreEqual(obj.ToString(), JsonBuilder.EmptyJsonString);
         }
 
         [TestMethod]
@@ -24,11 +24,12 @@ namespace JsonBuilder.Tests
             // Arrange
             JsonBuilder obj = new JsonBuilder();
             string jsonResult;
+            obj.Format = JsonFormat.Minify;
 
             // Act
             obj.AppendProperty("name", "Jon");
             obj.AppendProperty("age", 22);
-            jsonResult = obj.ToString(JsonFormat.Minify);
+            jsonResult = obj.ToString();
 
             // Assert
             Assert.AreEqual(jsonResult, "{\"name\":\"Jon\",\"age\":22}");
@@ -44,8 +45,9 @@ namespace JsonBuilder.Tests
             string jsonResult;
 
             // Act
+            obj.Format = format;
             obj.AppendProperty("name", "Jon");
-            jsonResult = obj.ToString(format);
+            jsonResult = obj.ToString();
 
             // Assert
             Assert.AreEqual(jsonResult, expectedResult);

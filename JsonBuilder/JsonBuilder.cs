@@ -23,6 +23,11 @@ namespace JsonBuilder
         }
 
         /// <summary>
+        /// Gets or sets the JSON format for the current object. Default is <see cref="JsonFormat.Indent"/>.
+        /// </summary>
+        public JsonFormat Format { get; set; } = JsonFormat.Indent;
+
+        /// <summary>
         /// Add new property to json object
         /// </summary>
         /// <param name="property">property Name</param>
@@ -82,14 +87,7 @@ namespace JsonBuilder
         }
 
         /// <inheritdoc />
-        public sealed override string ToString() => ToString(JsonFormat.Indent);
-
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <param name="formatting">The JSON format.</param>
-        /// <returns>A string that represents the current object.</returns>
-        public string ToString(JsonFormat formatting)
+        public sealed override string ToString()
         {
             if ((_currentObject as IDictionary<string, dynamic>).Keys.Count == 0)
                 return EmptyJsonString;
@@ -101,7 +99,7 @@ namespace JsonBuilder
                 .TrimStart('[')
                 .TrimEnd(']');
 
-            return formatting == JsonFormat.Indent
+            return Format == JsonFormat.Indent
                 ? JavaScriptSerializer.Serialize(ConvertToObject(jsonString)).Indent()
                 : JavaScriptSerializer.Serialize(ConvertToObject(jsonString));
         }
